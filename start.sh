@@ -8,4 +8,4 @@ kubectl create -f api-svc.yaml
 kubectl create -f frontend-pod.yaml
 kubectl get all
 
-#kubectl port-forward pod/frontend 8080:8001
+#kubectl port-forward pod/frontend 8080:8080

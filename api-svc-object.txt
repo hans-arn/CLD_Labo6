@@ -1,0 +1,14 @@
+Name:              api-svc
+Namespace:         default
+Labels:            component=api
+Annotations:       <none>
+Selector:          app=todo,component=api
+Type:              ClusterIP
+IP Families:       <none>
+IP:                10.109.255.254
+IPs:               10.109.255.254
+Port:              api  8081/TCP
+TargetPort:        8081/TCP
+Endpoints:         172.17.0.4:8081
+Session Affinity:  None
+Events:            <none>

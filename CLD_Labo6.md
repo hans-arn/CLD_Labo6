@@ -4,18 +4,21 @@
 
 # TASK 1 - DEPLOY THE APPLICATION ON A LOCAL TEST CLUSTER
 
-## SUBTASK 1.1 - INSTALLATION OF MINIKUBE
+> Document any difficulties  you faced and how you overcame them. Copy the object descriptions into the lab report.
 
-## SUBTASK 1.2 - INSTALLATION OF KUBECTL
+Nous avons rencontré les problèmes suivant:
 
-## SUBTASK 1.3 - CREATE A ONE-NODE CLUSTER ON YOUR LOCAL MACHINE
+- ```sh
+  # En voulant étendre le port du frontend sur le port 8001 avec la commande ci-dessous, nous avons remarqué que la page n'était pas joignable.
+  kubectl port-forward pod/frontend 8080:8001
+  # en changeant pour 
+  kubectl port-forward pod/frontend 8080:8080
+  # nous avons pu accéder à la page 
+  ```
 
-## SUBTASK 1.4 - DEPLOY THE APPLICATION
+- La deuxième erreur que nous avons faites viens de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
 
-DELIVERABLES
-Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.
-
-
+les copies des objets sont dans un fichier appart tel que **frontend-object.txt** et **api-svc-object.txt**.
 
 # TASK 2 - DEPLOY THE APPLICATION IN KUBERNETES ENGINE
 

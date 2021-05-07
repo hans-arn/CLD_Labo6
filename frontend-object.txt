@@ -1,0 +1,54 @@
+Name:         frontend
+Namespace:    default
+Priority:     0
+Node:         minikube/192.168.49.2
+Start Time:   Fri, 07 May 2021 04:20:28 +0200
+Labels:       app=todo
+              component=frontend
+Annotations:  <none>
+Status:       Running
+IP:           172.17.0.5
+IPs:
+  IP:  172.17.0.5
+Containers:
+  frontend:
+    Container ID:   docker://0f66ff0a8e7f6493592ae329006544c3faee9f8d4997ff83fe06f92dba8a58f1
+    Image:          icclabcna/ccp2-k8s-todo-frontend
+    Image ID:       docker-pullable://icclabcna/ccp2-k8s-todo-frontend@sha256:5892b8f75a4dd3aa9d9cf527f8796a7638dba574ea8e6beef49360a3c67bbb44
+    Port:           8080/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Fri, 07 May 2021 04:24:16 +0200
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:  300m
+    Requests:
+      cpu:  300m
+    Environment:
+      API_ENDPOINT_URL:  http://api-svc:8081
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-5pfrf (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-5pfrf:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-5pfrf
+    Optional:    false
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age    From               Message
+  ----    ------     ----   ----               -------
+  Normal  Scheduled  12m    default-scheduler  Successfully assigned default/frontend to minikube
+  Normal  Pulling    12m    kubelet            Pulling image "icclabcna/ccp2-k8s-todo-frontend"
+  Normal  Pulled     8m27s  kubelet            Successfully pulled image "icclabcna/ccp2-k8s-todo-frontend" in 3m45.730749866s
+  Normal  Created    8m27s  kubelet            Created container frontend
+  Normal  Started    8m26s  kubelet            Started container frontend

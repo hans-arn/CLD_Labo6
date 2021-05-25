@@ -462,7 +462,7 @@ Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE
 
 
 
-### Task 3.2
+## Task 3.2
 
 
 

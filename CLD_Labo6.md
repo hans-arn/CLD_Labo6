@@ -288,5 +288,55 @@ spec:
 
 
 
+
+
+### Task 3.2
+
+
+
+> What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
+
+
+
+
+
+> What happens when you delete the Redis Pod?
+
+
+
+
+
+> How can you change the number of instances temporarily to 3? Hint: look for scaling in the deployment documentation
+
+On peut utiliser la commande suivante: `kubectl scale --replicas=3 deployment.apps/frontend`
+
+
+
+> What autoscaling features are available? Which metrics are used?
+
+Il y a 3 types différents d'autoscaling:
+
+
+
+- Horizontal Pod Autoscaler: "Scaling out"
+- Vertical Pod Autoscaler: "Scaling up"
+- Cluster Autoscaler
+
+
+
+Pour chacune, il y a 3 différents types de métriques disponibles:
+
+- Container Resource Metrics: CPU/Memory usage 
+- Multiple Metrics: Utiliser plusieurs métriques en même temps
+- Custom Metrics: Des métriques que l'on peut définir nous-mêmes en utilisant l'API Custom Metrics
+
+
+
+> How can you update a component? (see "Updating a Deployment" in the deployment documentation)
+
+
+
+
+
 DELIVERABLES
 Document your observations in the lab report. Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.

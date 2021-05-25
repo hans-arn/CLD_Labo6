@@ -18,7 +18,7 @@ Nous avons rencontré les problèmes suivant:
 
 - La deuxième erreur que nous avons faites viens de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
 
-pour le service api-svc:
+objet du service api:
 
 ```sh
 Name:              api-svc
@@ -137,8 +137,6 @@ spec:
       value: http://api-svc:8081
 ```
 
-
-
 # TASK 2 - DEPLOY THE APPLICATION IN KUBERNETES ENGINE
 
 ```yaml
@@ -157,6 +155,23 @@ spec:
       targetPort: 8080
 ```
 
+```sh
+Name:              frontend-svc
+Namespace:         default
+Labels:            component=frontend
+Annotations:       cloud.google.com/neg: {"ingress":true}
+Selector:          app=todo
+Type:              ClusterIP
+IP Families:       <none>
+IP:                10.0.11.136
+IPs:               <none>
+Port:              <unset>  80/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.124.3.4:8080,10.124.4.3:8080,10.124.5.4:8080
+Session Affinity:  None
+Events:            <none>
+```
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -171,6 +186,32 @@ spec:
   selector:
     app: todo
   type: LoadBalancer
+```
+
+```sh
+Name:                     loadbalancer-svc
+Namespace:                default
+Labels:                   <none>
+Annotations:              cloud.google.com/neg: {"ingress":true}
+Selector:                 app=todo
+Type:                     LoadBalancer
+IP Families:              <none>
+IP:                       10.0.3.198
+IPs:                      <none>
+LoadBalancer Ingress:     34.116.152.255
+Port:                     loadbalancer  80/TCP
+TargetPort:               8080/TCP
+NodePort:                 loadbalancer  32404/TCP
+Endpoints:                10.124.3.4:8080,10.124.4.3:8080,10.124.5.4:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age                From                Message
+  ----    ------                ----               ----                -------
+  Normal  UpdatedLoadBalancer   56m (x2 over 56m)  service-controller  Updated load balancer with new hosts
+  Normal  EnsuringLoadBalancer  51m                service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   51m                service-controller  Ensured load balancer
+  Normal  UpdatedLoadBalancer   46m (x4 over 49m)  service-controller  Updated load balancer with new hosts
 ```
 
 
@@ -217,6 +258,46 @@ spec:
           value: http://api-svc:8081
 ```
 
+```sh
+Name:                   frontend
+Namespace:              default
+CreationTimestamp:      Tue, 25 May 2021 21:10:18 +0200
+Labels:                 app=todo
+                        component=frontend
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=todo,component=frontend
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=frontend
+  Containers:
+   frontend:
+    Image:      icclabcna/ccp2-k8s-todo-frontend
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:  300m
+    Environment:
+      API_ENDPOINT_URL:  http://api-svc:8081
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   frontend-7b6d9d4567 (2/2 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m36s  deployment-controller  Scaled up replica set frontend-7b6d9d4567 to 2
+```
+
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -252,6 +333,48 @@ spec:
           value: ccp2
 ```
 
+```sh
+Name:                   api
+Namespace:              default
+CreationTimestamp:      Tue, 25 May 2021 21:10:25 +0200
+Labels:                 app=todo
+                        component=api
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=todo,component=api
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=api
+  Containers:
+   api:
+    Image:      icclabcna/ccp2-k8s-todo-api
+    Port:       8081/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:  300m
+    Environment:
+      REDIS_ENDPOINT:  redis-svc
+      REDIS_PWD:       ccp2
+    Mounts:            <none>
+  Volumes:             <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   api-856fd5444c (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  42s   deployment-controller  Scaled up replica set api-856fd5444c to 2
+```
+
+
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -286,7 +409,47 @@ spec:
         - --appendonly yes
 ```
 
+```sh
+Name:                   redis
+Namespace:              default
+CreationTimestamp:      Tue, 25 May 2021 21:10:10 +0200
+Labels:                 app=todo
+                        component=redis
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=todo,component=redis
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=todo
+           component=redis
+  Containers:
+   redis:
+    Image:      redis
+    Port:       6379/TCP
+    Host Port:  0/TCP
+    Args:
+      redis-server
+      --requirepass ccp2
+      --appendonly yes
+    Limits:
+      cpu:        300m
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   redis-5799bdbcbb (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m12s  deployment-controller  Scaled up replica set redis-5799bdbcbb to 1
+```
 
+## Difficultés rencontrées 
 
-DELIVERABLES
-Document your observations in the lab report. Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report.

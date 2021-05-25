@@ -4,9 +4,9 @@
 
 # TASK 1 - DEPLOY THE APPLICATION ON A LOCAL TEST CLUSTER
 
-> Document any difficulties  you faced and how you overcame them. Copy the object descriptions into the lab report.
+### Difficultés rencontrées 
 
-Nous avons rencontré les problèmes suivants:
+Nous avons rencontré les problèmes suivant:
 
 - ```sh
   # En voulant étendre le port du frontend sur le port 8001 avec la commande ci-dessous, nous avons remarqué que la page n'était pas joignable.
@@ -16,11 +16,26 @@ Nous avons rencontré les problèmes suivants:
   # nous avons pu accéder à la page 
   ```
 
-- La deuxième erreur que nous avons faite vient de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
+- La deuxième erreur que nous avons faites viens de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
 
 
-
-objet du service api:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: api
+  name: api-svc
+spec:
+  ports:
+  - port: 8081
+    targetPort: 8081
+    name: api
+  selector:
+    app: todo
+    component: api
+  type: ClusterIP
+```
 
 ```sh
 Name:              api-svc
@@ -39,7 +54,27 @@ Session Affinity:  None
 Events:            <none>
 ```
 
-pour l'objet frontend:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  labels:
+    component: frontend
+    app: todo
+spec:
+  containers:
+  - name: frontend
+    image: icclabcna/ccp2-k8s-todo-frontend
+    ports:
+    - containerPort: 8080
+    resources:
+      limits:
+        cpu: 300m
+    env:
+    - name: API_ENDPOINT_URL
+      value: http://api-svc:8081
+```
 
 ```sh
 Name:         frontend
@@ -98,48 +133,6 @@ Events:
   Normal  Started    8m26s  kubelet            Started container frontend
 
 ```
-
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    component: api
-  name: api-svc
-spec:
-  ports:
-  - port: 8081
-    targetPort: 8081
-    name: api
-  selector:
-    app: todo
-    component: api
-  type: ClusterIP
-```
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: frontend
-  labels:
-    component: frontend
-    app: todo
-spec:
-  containers:
-  - name: frontend
-    image: icclabcna/ccp2-k8s-todo-frontend
-    ports:
-    - containerPort: 8080
-    resources:
-      limits:
-        cpu: 300m
-    env:
-    - name: API_ENDPOINT_URL
-      value: http://api-svc:8081
-```
-
-
 
 # TASK 2 - DEPLOY THE APPLICATION IN KUBERNETES ENGINE
 
@@ -224,9 +217,7 @@ Events:
 
 ### Difficultés rencontrées 
 
-Pour cette partie, aucune difficulté n'a été rencontrée.
-
-
+Pour cette partie, aucune difficulté a été rencontrée.
 
 # TASK 3 - ADD AND EXERCISE RESILIENCE
 
@@ -456,25 +447,22 @@ Events:
 
 ### Difficultés rencontrées
 
-Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE, en laissant la taille à 2, il y avait 3 pods qui restaient en état pending. Pour remédier à cela, nous avons ajouté un pool de noeuds sur GKE afin d'avoir le bon nombre de pods.
+Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE. en laissant la taille à 2, 3 pods restaient en pending. Pour remédier à cela nous avons, ajouter un pool de noeuds sur GKE afin d'avoir le bon nombre de pods.
 
 
-
-
-
-## Task 3.2
+### Task 3.2
 
 
 
 > What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
 
-Un autre Frontend ou API Pod est relancé automatiquement. Cela prend environ une quinzaine de secondes environ. 
+
 
 
 
 > What happens when you delete the Redis Pod?
 
-Un autre Redis Pod est relancé automatiquement et cela a pris moins de temps, environ 5 secondes.
+
 
 
 
@@ -505,6 +493,3 @@ Pour chacune, il y a 3 différents types de métriques disponibles:
 
 
 > How can you update a component? (see "Updating a Deployment" in the deployment documentation)
-
-Selon la documentation, il faut modifier le champ `.spec.template.spec.containers[0].image` du fichier de déploiement. Cela implique donc changer l'image utilisée pour le déploiement (en changeant le numéro de version utilisé par exemple si celui-ci est précisé)
-

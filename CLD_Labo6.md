@@ -454,19 +454,22 @@ Events:
 ## Difficultés rencontrées 
 
 
+
+
+
 ### Task 3.2
 
 
 
 > What happens if you delete a Frontend or API Pod? How long does it take for the system to react?
 
-
+Un autre Frontend ou API Pod est relancé automatiquement. Cela prend environ une quinzaine de secondes environ. 
 
 
 
 > What happens when you delete the Redis Pod?
 
-
+Un autre Redis Pod est relancé automatiquement et cela a pris moins de temps, environ 5 secondes.
 
 
 
@@ -497,3 +500,6 @@ Pour chacune, il y a 3 différents types de métriques disponibles:
 
 
 > How can you update a component? (see "Updating a Deployment" in the deployment documentation)
+
+Selon la documentation, il faut modifier le champ `.spec.template.spec.containers[0].image` du fichier de déploiement. Cela implique donc changer l'image utilisée pour le déploiement (en changeant le numéro de version utilisé par exemple si celui-ci est précisé)
+

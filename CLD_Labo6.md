@@ -6,7 +6,7 @@
 
 > Document any difficulties  you faced and how you overcame them. Copy the object descriptions into the lab report.
 
-Nous avons rencontré les problèmes suivant:
+Nous avons rencontré les problèmes suivants:
 
 - ```sh
   # En voulant étendre le port du frontend sur le port 8001 avec la commande ci-dessous, nous avons remarqué que la page n'était pas joignable.
@@ -16,7 +16,9 @@ Nous avons rencontré les problèmes suivant:
   # nous avons pu accéder à la page 
   ```
 
-- La deuxième erreur que nous avons faites viens de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
+- La deuxième erreur que nous avons faite vient de la connexion entre le frontend et l'api. Nous avions mis la variable d'environnement à **api-svc:8081** au lieu de **http://api-svc:8081**.
+
+
 
 objet du service api:
 
@@ -37,7 +39,7 @@ Session Affinity:  None
 Events:            <none>
 ```
 
-pour l'objet frontend 
+pour l'objet frontend:
 
 ```sh
 Name:         frontend
@@ -137,6 +139,8 @@ spec:
       value: http://api-svc:8081
 ```
 
+
+
 # TASK 2 - DEPLOY THE APPLICATION IN KUBERNETES ENGINE
 
 ```yaml
@@ -220,7 +224,9 @@ Events:
 
 ### Difficultés rencontrées 
 
-Pour cette partie, aucune difficulté a été rencontrée.
+Pour cette partie, aucune difficulté n'a été rencontrée.
+
+
 
 # TASK 3 - ADD AND EXERCISE RESILIENCE
 
@@ -450,7 +456,7 @@ Events:
 
 ### Difficultés rencontrées
 
-Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE. en laissant la taille à 2, 3 pods restaient en pending. Pour remédier à cela nous avons, ajouter un pool de noeuds sur GKE afin d'avoir le bon nombre de pods.
+Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE, en laissant la taille à 2, il y avait 3 pods qui restaient en état pending. Pour remédier à cela, nous avons ajouté un pool de noeuds sur GKE afin d'avoir le bon nombre de pods.
 
 
 

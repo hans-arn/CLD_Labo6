@@ -218,10 +218,9 @@ Events:
 
 ![](img/loadbalancer.png)
 
-DELIVERABLES
-Document any difficulties you faced and how you overcame them. Copy the object descriptions into the lab report (if they are unchanged from the previous task just say so).
+### Difficultés rencontrées 
 
-Take a screenshot of the cluster details from the GKE console. Copy the output of the kubectl describe command to describe your load balancer once completely initialized.
+Pour cette partie, aucune difficulté a été rencontrée.
 
 # TASK 3 - ADD AND EXERCISE RESILIENCE
 
@@ -373,8 +372,6 @@ Events:
   Normal  ScalingReplicaSet  42s   deployment-controller  Scaled up replica set api-856fd5444c to 2
 ```
 
-
-
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -451,7 +448,9 @@ Events:
   Normal  ScalingReplicaSet  2m12s  deployment-controller  Scaled up replica set redis-5799bdbcbb to 1
 ```
 
-## Difficultés rencontrées 
+### Difficultés rencontrées
+
+Nous avons rencontré des difficultés au niveau de la taille du cluster sur GKE. en laissant la taille à 2, 3 pods restaient en pending. Pour remédier à cela nous avons, ajouter un pool de noeuds sur GKE afin d'avoir le bon nombre de pods.
 
 
 ### Task 3.2
